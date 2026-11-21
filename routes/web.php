@@ -33,7 +33,7 @@ Route::get('opportunities/{opportunity}', [OpportunityController::class, 'show']
 
 // Logged in, every role
 Route::get('/dashboard', DashboardController::class)
-    ->middleware(['auth', 'verified'])
+    ->middleware('auth')
     ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -64,6 +64,7 @@ Route::middleware(['auth', 'role:teacher,admin'])->group(function () {
 // Student, parent, teacher and admin
 Route::middleware(['auth', 'role:student,parent,teacher,admin'])->group(function () {
     Route::resource('grades', GradeController::class)->only(['index']);
+    Route::get('report-card/{student}', [GradeController::class, 'report'])->name('grades.report');
     Route::resource('schedules', ScheduleController::class)->only(['index']);
 });
 

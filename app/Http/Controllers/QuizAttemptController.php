@@ -28,7 +28,7 @@ class QuizAttemptController extends Controller
 
     public function store(Request $request, Quiz $quiz): RedirectResponse
     {
-        abort_unless($quiz->is_published && $quiz->grade_level === $request->user()->grade_level, 404);
+        abort_unless(Quiz::openTo($request->user())->whereKey($quiz->id)->exists(), 404);
 
         // A quiz can be attempted only once: a second try just shows the first result.
         if ($existing = $quiz->attemptBy($request->user())) {

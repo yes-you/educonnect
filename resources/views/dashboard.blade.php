@@ -15,6 +15,8 @@
         </div>
     </div>
 
+    @include('dashboard._welcome')
+
     {{-- One partial per role: _admin, _teacher, _student, _parent, _organization --}}
     @include('dashboard._'.auth()->user()->role, $data)
 

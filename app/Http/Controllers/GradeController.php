@@ -43,6 +43,27 @@ class GradeController extends Controller
         ]);
     }
 
+    // Printable report card for one student.
+    public function report(User $student): View
+    {
+        abort_unless($student->role === 'student', 404);
+
+        Gate::authorize('viewReport', [Grade::class, $student]);
+
+        // One row per subject: the grade of each quarter and the final grade (average of its quarters).
+        $subjects = $student->grades()->orderBy('subject')->get()
+            ->groupBy('subject')
+            ->map(fn ($rows) => [
+                'quarters' => $rows->pluck('grade', 'quarter'),
+                'final' => round($rows->avg('grade'), 2),
+            ]);
+
+        // General average: the average of the subjects' final grades.
+        $generalAverage = $subjects->isEmpty() ? null : round($subjects->avg('final'), 2);
+
+        return view('grades.report', compact('student', 'subjects', 'generalAverage'));
+    }
+
     public function create(): View
     {
         return view('grades.create', [

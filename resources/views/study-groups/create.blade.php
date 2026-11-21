@@ -4,6 +4,7 @@
 
 @section('content')
     <h1 class="h3 mb-3">New study group</h1>
+    <p class="text-muted">Study groups are open: any student or teacher can join, and members can read the group's messages.</p>
 
     <form method="POST" action="{{ route('study-groups.store') }}">
         @csrf

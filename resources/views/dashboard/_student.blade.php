@@ -2,6 +2,22 @@
 
 <div class="row mt-3">
     <div class="col-lg-6">
+        <section class="card h-100" aria-labelledby="student-quizzes">
+            <div class="card-body">
+                <h2 id="student-quizzes" class="h5">Quizzes to take</h2>
+                @forelse ($quizzes as $quiz)
+                    <p class="mb-1">
+                        <a href="{{ route('quizzes.show', $quiz) }}">{{ $quiz->title }}</a>
+                        <span class="text-body-secondary small">&middot; {{ $quiz->questions_count }} questions</span>
+                    </p>
+                @empty
+                    <p class="mb-0">You have taken every available quiz.</p>
+                @endforelse
+                <a href="{{ route('quizzes.index') }}" class="d-inline-block mt-2">All quizzes</a>
+            </div>
+        </section>
+    </div>
+    <div class="col-lg-6">
         <section class="card h-100" aria-labelledby="student-modules">
             <div class="card-body">
                 <h2 id="student-modules" class="h5">Latest modules for {{ $grade }}</h2>
@@ -18,30 +34,14 @@
         </section>
     </div>
 
-    <div class="col-lg-6">
-        <section class="card h-100" aria-labelledby="student-quizzes">
-            <div class="card-body">
-                <h2 id="student-quizzes" class="h5">Quizzes to take</h2>
-                @forelse ($quizzes as $quiz)
-                    <p class="mb-1">
-                        <a href="{{ route('quizzes.show', $quiz) }}">{{ $quiz->title }}</a>
-                        <span class="text-body-secondary small">&middot; {{ $quiz->questions_count }} questions</span>
-                    </p>
-                @empty
-                    <p class="mb-0">You have taken every available quiz.</p>
-                @endforelse
-                <a href="{{ route('quizzes.index') }}" class="d-inline-block mt-2">All quizzes</a>
-            </div>
-        </section>
-    </div>
 </div>
 
-<section class="card" aria-labelledby="student-progress">
-    <div class="card-body">
-        <h2 id="student-progress" class="h5">My quiz progress</h2>
+<details class="card" id="student-progress">
+    <summary class="card-body fw-semibold">My quiz progress</summary>
+    <div class="card-body pt-0">
         @include('dashboard._progress', ['progress' => $progress])
     </div>
-</section>
+</details>
 
 <section class="card" aria-labelledby="student-attempts">
     <div class="card-body">

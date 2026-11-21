@@ -24,15 +24,21 @@
         ['admin.opportunities.index', 'Pending Postings'],
     ];
     $user = auth()->user();
+    $newAnnouncements = $user ? $user->newAnnouncementsCount() : 0;
 
-    // Keep only the links this user may see; a group left with one link shows as a plain link.
+    // Keep only the links this user may see; a group left with one or two links shows them directly.
     $menu = [];
     if ($user) {
         foreach ($groups as $group) {
             $visible = [];
             foreach ($group['links'] as [$routeName, $label, $roles, $patterns]) {
                 if (Route::has($routeName) && ($roles === null || $user->hasRole(...$roles))) {
-                    $visible[] = ['url' => route($routeName), 'label' => $label, 'active' => request()->routeIs(...$patterns)];
+                    $visible[] = [
+                        'url' => route($routeName),
+                        'label' => $label,
+                        'active' => request()->routeIs(...$patterns),
+                        'badge' => $routeName === 'announcements.index' ? $newAnnouncements : 0,
+                    ];
                 }
             }
             if ($visible) {
@@ -78,21 +84,23 @@
                     @endif
 
                     @foreach ($menu as $group)
-                        @if (count($group['links']) === 1)
-                            @php $link = $group['links'][0]; @endphp
-                            <li class="nav-item">
-                                <a class="nav-link {{ $link['active'] ? 'active' : '' }}" href="{{ $link['url'] }}"
-                                   @if ($link['active']) aria-current="page" @endif>{{ $link['label'] }}</a>
-                            </li>
+                        {{-- One or two links are shown directly: a dropdown would only add a tap. --}}
+                        @if (count($group['links']) <= 2)
+                            @foreach ($group['links'] as $link)
+                                <li class="nav-item">
+                                    <a class="nav-link {{ $link['active'] ? 'active' : '' }}" href="{{ $link['url'] }}"
+                                       @if ($link['active']) aria-current="page" @endif>{{ $link['label'] }}@include('layouts.partials.new-badge', ['count' => $link['badge']])</a>
+                                </li>
+                            @endforeach
                         @else
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle {{ collect($group['links'])->contains('active', true) ? 'active' : '' }}" href="#"
-                                   role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ $group['label'] }}</a>
+                                   role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ $group['label'] }}@include('layouts.partials.new-badge', ['count' => collect($group['links'])->sum('badge')])</a>
                                 <ul class="dropdown-menu">
                                     @foreach ($group['links'] as $link)
                                         <li>
                                             <a class="dropdown-item {{ $link['active'] ? 'active' : '' }}" href="{{ $link['url'] }}"
-                                               @if ($link['active']) aria-current="page" @endif>{{ $link['label'] }}</a>
+                                               @if ($link['active']) aria-current="page" @endif>{{ $link['label'] }}@include('layouts.partials.new-badge', ['count' => $link['badge']])</a>
                                         </li>
                                     @endforeach
                                 </ul>
@@ -126,11 +134,12 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-end ec-a11y-menu">
                         <p class="dropdown-header px-2" id="ec-text-size-label">Text size</p>
-                        <div class="btn-group px-2 mb-2" role="group" aria-labelledby="ec-text-size-label">
-                            <button type="button" class="btn btn-outline-primary btn-sm" data-font-scale="100" aria-pressed="false" aria-label="Text size 100 percent">A-</button>
-                            <button type="button" class="btn btn-outline-primary btn-sm" data-font-scale="115" aria-pressed="false" aria-label="Text size 115 percent">A</button>
-                            <button type="button" class="btn btn-outline-primary btn-sm" data-font-scale="130" aria-pressed="false" aria-label="Text size 130 percent">A+</button>
+                        <div class="btn-group px-2 mb-1" role="group" aria-labelledby="ec-text-size-label">
+                            <button type="button" class="btn btn-outline-primary ec-size-btn" data-font-scale="100" data-size-name="Normal" aria-pressed="false">Normal</button>
+                            <button type="button" class="btn btn-outline-primary ec-size-btn" data-font-scale="115" data-size-name="Large" aria-pressed="false">Large</button>
+                            <button type="button" class="btn btn-outline-primary ec-size-btn" data-font-scale="130" data-size-name="Larger" aria-pressed="false">Larger</button>
                         </div>
+                        <p class="small text-body-secondary px-2 mb-2" data-font-status aria-live="polite"></p>
                         <button type="button" class="dropdown-item" data-contrast-toggle aria-pressed="false">
                             <i class="bi bi-circle-half" aria-hidden="true"></i> High contrast
                         </button>

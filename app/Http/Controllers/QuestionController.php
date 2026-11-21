@@ -15,6 +15,10 @@ class QuestionController extends Controller
     {
         Gate::authorize('manage', $quiz);
 
+        if ($quiz->attempts()->exists()) {
+            return back()->with('error', 'Students already took this quiz. Make a new quiz instead of changing its questions.');
+        }
+
         $data = $request->validate([
             'question' => ['required', 'string', 'max:1000'],
             'option_a' => ['required', 'string', 'max:255'],
@@ -34,6 +38,10 @@ class QuestionController extends Controller
         $quiz = $question->quiz;
 
         Gate::authorize('manage', $quiz);
+
+        if ($quiz->attempts()->exists()) {
+            return back()->with('error', 'Students already took this quiz. Make a new quiz instead of changing its questions.');
+        }
 
         $question->delete();
 

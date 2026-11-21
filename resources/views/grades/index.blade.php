@@ -18,6 +18,9 @@
         <div class="card">
             <div class="card-body">
                 @include('grades._table', ['grades' => $grades])
+                <a href="{{ route('grades.report', $user) }}" class="btn btn-outline-primary mt-3">
+                    <i class="bi bi-printer" aria-hidden="true"></i> Printable report card
+                </a>
             </div>
         </div>
 
@@ -27,10 +30,13 @@
                 <div class="card-body">
                     <h2 class="h5">{{ $child->name }} <span class="badge text-bg-light border">{{ $child->grade_level }}</span></h2>
                     @include('grades._table', ['grades' => $child->grades])
+                    <a href="{{ route('grades.report', $child) }}" class="btn btn-outline-primary btn-sm mt-3">
+                        <i class="bi bi-printer" aria-hidden="true"></i> Printable report card for {{ $child->name }}
+                    </a>
                 </div>
             </section>
         @empty
-            <p>No child is linked to your account yet. Please ask the school administrator to link your child.</p>
+            <p>No child is linked to your account yet. Please ask the school administrator to link your child; their grades, quiz results and class schedule will appear here once it is done.</p>
         @endforelse
 
     @else
@@ -76,6 +82,7 @@
                             <td>{{ $grade->remarks }}</td>
                             <td>{{ $grade->teacher->name }}</td>
                             <td class="text-nowrap">
+                                <a href="{{ route('grades.report', $grade->student) }}" class="btn btn-sm btn-outline-secondary">Report card</a>
                                 @can('update', $grade)
                                     <a href="{{ route('grades.edit', $grade) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
                                 @endcan

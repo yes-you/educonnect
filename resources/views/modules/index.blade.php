@@ -47,7 +47,7 @@
     </form>
 
     <div class="table-responsive">
-        <table class="table table-hover align-middle">
+        <table class="table table-hover align-middle ec-stack">
             <thead>
                 <tr>
                     <th scope="col">Title</th>
@@ -61,12 +61,12 @@
             <tbody>
                 @forelse ($modules as $module)
                     <tr>
-                        <td><a href="{{ route('modules.show', $module) }}">{{ $module->title }}</a></td>
-                        <td>{{ $module->subject }}</td>
-                        <td>{{ $module->grade_level }}</td>
-                        <td><span class="badge text-bg-secondary">{{ ucfirst(str_replace('_', ' ', $module->type)) }}</span></td>
-                        <td>{{ $module->teacher->name }}</td>
-                        <td>{{ $module->created_at->format('M d, Y') }}</td>
+                        <td class="ec-stack-title"><a href="{{ route('modules.show', $module) }}">{{ $module->title }}</a></td>
+                        <td data-label="Subject">{{ $module->subject }}</td>
+                        <td data-label="Grade">{{ $module->grade_level }}</td>
+                        <td data-label="Type"><span class="badge text-bg-secondary">{{ ucfirst(str_replace('_', ' ', $module->type)) }}</span></td>
+                        <td data-label="Teacher">{{ $module->teacher->name }}</td>
+                        <td data-label="Uploaded">{{ $module->created_at->format('M d, Y') }}</td>
                     </tr>
                 @empty
                     <tr><td colspan="6" class="text-center py-4">No modules match your filters.</td></tr>

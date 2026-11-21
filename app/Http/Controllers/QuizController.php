@@ -19,8 +19,7 @@ class QuizController extends Controller
 
         $quizzes = Quiz::with('teacher')
             ->withCount('questions')
-            ->when($user->hasRole('student'), fn ($query) => $query->where('is_published', true))
-            ->when($user->hasRole('student'), fn ($query) => $query->where('grade_level', $user->grade_level))
+            ->when($user->hasRole('student'), fn ($query) => $query->openTo($user))
             ->when($user->hasRole('teacher'), fn ($query) => $query->where('teacher_id', $user->id))
             ->when($request->filled('grade_level') && ! $user->hasRole('student'), fn ($query) => $query->where('grade_level', $request->grade_level))
             ->latest()
@@ -37,7 +36,7 @@ class QuizController extends Controller
     {
         if ($request->user()->hasRole('student')) {
             // Unpublished quizzes and quizzes of another grade level do not exist for a student.
-            abort_unless($quiz->is_published && $quiz->grade_level === $request->user()->grade_level, 404);
+            abort_unless(Quiz::openTo($request->user())->whereKey($quiz->id)->exists(), 404);
 
             // A quiz can be attempted only once: if it is already taken, show the result instead.
             if ($attempt = $quiz->attemptBy($request->user())) {
@@ -91,7 +90,14 @@ class QuizController extends Controller
     {
         Gate::authorize('update', $quiz);
 
-        $quiz->update($request->validate($this->rules($request->user())));
+        $data = $request->validate($this->rules($request->user()));
+
+        // Changing the grade level after students took the quiz would hide their results.
+        if ($quiz->attempts()->exists() && $data['grade_level'] !== $quiz->grade_level) {
+            return back()->withInput()->with('error', 'Students already took this quiz, so its grade level cannot change.');
+        }
+
+        $quiz->update($data);
 
         return redirect()->route('quizzes.show', $quiz)->with('success', 'Quiz updated.');
     }

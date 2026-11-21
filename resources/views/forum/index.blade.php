@@ -21,7 +21,7 @@
     </form>
 
     <div class="table-responsive">
-        <table class="table table-hover align-middle">
+        <table class="table table-hover align-middle ec-stack">
             <thead>
                 <tr>
                     <th scope="col">Thread</th>
@@ -33,10 +33,10 @@
             <tbody>
                 @forelse ($threads as $thread)
                     <tr>
-                        <td><a href="{{ route('threads.show', $thread) }}">{{ $thread->title }}</a></td>
-                        <td>{{ $thread->author->name }}</td>
-                        <td>{{ $thread->replies_count }}</td>
-                        <td>{{ $thread->created_at->format('M d, Y') }}</td>
+                        <td class="ec-stack-title"><a href="{{ route('threads.show', $thread) }}">{{ $thread->title }}</a></td>
+                        <td data-label="Started by">{{ $thread->author->name }}</td>
+                        <td data-label="Replies">{{ $thread->replies_count }}</td>
+                        <td data-label="Posted">{{ $thread->created_at->format('M d, Y') }}</td>
                     </tr>
                 @empty
                     <tr><td colspan="4" class="text-center py-4">No threads yet. Start the first one.</td></tr>

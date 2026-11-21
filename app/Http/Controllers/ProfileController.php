@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Grade;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -47,6 +48,14 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
+
+        // The database refuses to delete a teacher who still owns grades, quizzes or modules.
+        if ($user->modules()->exists() || $user->quizzes()->exists() || Grade::where('teacher_id', $user->id)->exists()) {
+            return back()->withErrors(
+                ['password' => 'You still own grades, quizzes or modules. Ask an admin to reassign them first.'],
+                'userDeletion'
+            );
+        }
 
         Auth::logout();
 

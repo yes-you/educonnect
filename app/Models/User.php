@@ -39,6 +39,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'announcements_seen_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
@@ -73,10 +74,14 @@ class User extends Authenticatable
         ];
     }
 
-    // A student's parents.
-    public function parents(): BelongsToMany
+    // Announcements meant for this user that arrived since they last opened the Announcements page.
+    // Their own announcements do not count. A user who never opened the page counts every one.
+    public function newAnnouncementsCount(): int
     {
-        return $this->belongsToMany(User::class, 'parent_student', 'student_id', 'parent_id');
+        return Announcement::visibleTo($this)
+            ->where('user_id', '!=', $this->id)
+            ->when($this->announcements_seen_at, fn ($query, $seenAt) => $query->where('created_at', '>', $seenAt))
+            ->count();
     }
 
     public function modules(): HasMany
@@ -104,18 +109,8 @@ class User extends Authenticatable
         return $this->belongsToMany(StudyGroup::class)->withTimestamps();
     }
 
-    public function ownedStudyGroups(): HasMany
-    {
-        return $this->hasMany(StudyGroup::class, 'owner_id');
-    }
-
     public function opportunities(): HasMany
     {
         return $this->hasMany(Opportunity::class);
-    }
-
-    public function forumThreads(): HasMany
-    {
-        return $this->hasMany(ForumThread::class);
     }
 }

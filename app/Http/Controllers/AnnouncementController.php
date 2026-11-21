@@ -20,6 +20,9 @@ class AnnouncementController extends Controller
             ->paginate(10)
             ->withQueryString();
 
+        // Opening this page marks everything as seen, so the navbar badge goes back to zero.
+        $request->user()->forceFill(['announcements_seen_at' => now()])->save();
+
         return view('announcements.index', compact('announcements'));
     }
 

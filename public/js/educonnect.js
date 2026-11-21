@@ -33,7 +33,7 @@
         button.addEventListener('themechange', sync);
     });
 
-    // Text size (A-, A, A+) and high contrast. Both are remembered in localStorage;
+    // Text size (Normal, Large, Larger) and high contrast. Both are remembered in localStorage;
     // if storage is blocked the buttons still work, they just are not remembered.
     var SIZES = ['100', '115', '130'];
 
@@ -51,6 +51,11 @@
             var on = button.getAttribute('data-font-scale') === size;
             button.setAttribute('aria-pressed', on ? 'true' : 'false');
             button.classList.toggle('active', on);
+            if (on) {
+                document.querySelectorAll('[data-font-status]').forEach(function (line) {
+                    line.textContent = 'Text size: ' + button.getAttribute('data-size-name');
+                });
+            }
         });
     };
 
@@ -111,5 +116,18 @@
         box.addEventListener('mouseleave', start);
         box.addEventListener('focusout', start);
         start();
+    });
+
+    // First-visit tips: shown until dismissed, remembered per user on this device.
+    document.querySelectorAll('[data-welcome]').forEach(function (tip) {
+        var key = tip.getAttribute('data-welcome');
+        var dismissed = false;
+        try { dismissed = localStorage.getItem(key) === '1'; } catch (e) { /* storage blocked: show the tip */ }
+        if (dismissed) { return; }
+        tip.hidden = false;
+        tip.querySelector('[data-welcome-dismiss]').addEventListener('click', function () {
+            tip.remove();
+            try { localStorage.setItem(key, '1'); } catch (e) { /* private mode: it will show again next time */ }
+        });
     });
 })();

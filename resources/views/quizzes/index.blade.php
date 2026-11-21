@@ -35,7 +35,7 @@
     @endunless
 
     <div class="table-responsive">
-        <table class="table table-hover align-middle">
+        <table class="table table-hover align-middle ec-stack">
             <thead>
                 <tr>
                     <th scope="col">Title</th>
@@ -53,13 +53,13 @@
             <tbody>
                 @forelse ($quizzes as $quiz)
                     <tr>
-                        <td><a href="{{ route('quizzes.show', $quiz) }}">{{ $quiz->title }}</a></td>
-                        <td>{{ $quiz->subject }}</td>
-                        <td>{{ $quiz->grade_level }}</td>
-                        <td>{{ $quiz->questions_count }}</td>
-                        <td>{{ $quiz->teacher->name }}</td>
+                        <td class="ec-stack-title"><a href="{{ route('quizzes.show', $quiz) }}">{{ $quiz->title }}</a></td>
+                        <td data-label="Subject">{{ $quiz->subject }}</td>
+                        <td data-label="Grade">{{ $quiz->grade_level }}</td>
+                        <td data-label="Questions">{{ $quiz->questions_count }}</td>
+                        <td data-label="Teacher">{{ $quiz->teacher->name }}</td>
                         @if (auth()->user()->hasRole('student'))
-                            <td>
+                            <td data-label="Your result">
                                 @if ($attempt = $attempts->get($quiz->id))
                                     <a href="{{ route('attempts.show', $attempt) }}">{{ $attempt->score }} / {{ $attempt->total }} ({{ $attempt->percentage() }}%)</a>
                                 @else
@@ -67,7 +67,7 @@
                                 @endif
                             </td>
                         @else
-                            <td>
+                            <td data-label="Status">
                                 @if ($quiz->is_published)
                                     <span class="badge text-bg-success">Published</span>
                                 @else

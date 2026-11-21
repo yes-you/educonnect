@@ -11,7 +11,7 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table table-hover align-middle">
+        <table class="table table-hover align-middle ec-stack">
             <thead>
                 <tr>
                     <th scope="col">Group</th>
@@ -24,10 +24,10 @@
             <tbody>
                 @forelse ($groups as $group)
                     <tr>
-                        <td><a href="{{ route('study-groups.show', $group) }}">{{ $group->name }}</a></td>
-                        <td>{{ $group->subject }}</td>
-                        <td>{{ $group->owner->name }}</td>
-                        <td>{{ $group->members_count }}</td>
+                        <td class="ec-stack-title"><a href="{{ route('study-groups.show', $group) }}">{{ $group->name }}</a></td>
+                        <td data-label="Subject">{{ $group->subject }}</td>
+                        <td data-label="Owner">{{ $group->owner->name }}</td>
+                        <td data-label="Members">{{ $group->members_count }}</td>
                         <td>
                             @if (in_array($group->id, $joinedIds))
                                 <span class="badge text-bg-success">Joined</span>

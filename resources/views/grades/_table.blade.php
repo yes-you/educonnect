@@ -5,7 +5,7 @@
     <p class="mb-0">No grades have been encoded yet.</p>
 @else
     <div class="table-responsive">
-        <table class="table table-bordered align-middle mb-0">
+        <table class="table table-bordered align-middle mb-0 ec-stack ec-stack-grades">
             <thead>
                 <tr>
                     <th scope="col">Subject</th>
@@ -17,9 +17,9 @@
             <tbody>
                 @foreach ($bySubject as $subject => $rows)
                     <tr>
-                        <th scope="row">{{ $subject }}</th>
+                        <th scope="row" class="ec-stack-title">{{ $subject }}</th>
                         @foreach (\App\Models\Grade::QUARTERS as $quarter)
-                            <td>{{ $rows->firstWhere('quarter', $quarter)?->grade ?? '—' }}</td>
+                            <td data-label="Quarter {{ $quarter }}">{{ $rows->firstWhere('quarter', $quarter)?->grade ?? '—' }}</td>
                         @endforeach
                     </tr>
                 @endforeach

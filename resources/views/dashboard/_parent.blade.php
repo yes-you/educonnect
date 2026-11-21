@@ -35,7 +35,7 @@
 @empty
     <div class="card mt-3">
         <div class="card-body">
-            <p class="mb-0">No child is linked to your account yet. Please ask the school administrator to link your child.</p>
+            <p class="mb-0">No child is linked to your account yet. Please ask the school administrator to link your child; their grades, quiz results and class schedule will appear here once it is done.</p>
         </div>
     </div>
 @endforelse

@@ -929,3 +929,113 @@ html.high-contrast {
 .ec-footer-slim a {
     color: inherit;
 }
+
+/* ---------- Tables become stacked cards on phones ---------- */
+/* Add class "ec-stack" to a table, "data-label" to each cell and "ec-stack-title" to the main cell. */
+
+@media (max-width: 575.98px) {
+    .ec-stack thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    .ec-stack,
+    .ec-stack tbody,
+    .ec-stack tr,
+    .ec-stack td,
+    .ec-stack th[scope="row"] {
+        display: block;
+        width: 100%;
+    }
+
+    .ec-stack tr {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--ec-line);
+    }
+
+    .ec-stack tr:last-child {
+        border-bottom: 0;
+    }
+
+    .ec-stack > :not(caption) > * > * {
+        padding: 0.2rem 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .ec-stack td {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        text-align: right;
+    }
+
+    .ec-stack td[data-label]::before {
+        content: attr(data-label);
+        flex: none;
+        color: var(--ec-muted);
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-align: left;
+    }
+
+    .ec-stack .ec-stack-title {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: var(--ec-heading);
+        font-size: 1.05rem;
+        font-weight: 700;
+        text-align: left;
+    }
+
+    /* A single cell that spans the table (empty state) keeps its centred message. */
+    .ec-stack td[colspan] {
+        display: block;
+        text-align: center;
+    }
+}
+
+/* ---------- Touch targets: at least 44px ---------- */
+
+.ec-theme-toggle {
+    width: 2.75rem;
+    height: 2.75rem;
+}
+
+.ec-footer-slim a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0 0.25rem;
+}
+
+@media (max-width: 991.98px) {
+    .ec-navbar .navbar-toggler {
+        min-width: 2.75rem;
+        min-height: 2.75rem;
+    }
+
+    .ec-navbar .nav-link,
+    .ec-navbar .dropdown-item {
+        display: flex;
+        align-items: center;
+        min-height: 2.75rem;
+    }
+}
+
+/* Text-size buttons: full-size targets, selected one filled. */
+.ec-size-btn {
+    min-height: 2.75rem;
+    min-width: 4.5rem;
+}
+
+.ec-a11y-menu .btn-group .ec-size-btn.active {
+    background: var(--ec-brand);
+    border-color: var(--ec-brand);
+    color: #fff;
+}

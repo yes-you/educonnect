@@ -6,7 +6,7 @@
     <h1 class="h3 mb-3">My quiz results</h1>
 
     <div class="table-responsive">
-        <table class="table table-hover align-middle">
+        <table class="table table-hover align-middle ec-stack">
             <thead>
                 <tr>
                     <th scope="col">Quiz</th>
@@ -19,10 +19,10 @@
             <tbody>
                 @forelse ($attempts as $attempt)
                     <tr>
-                        <td>{{ $attempt->quiz->title }}</td>
-                        <td>{{ $attempt->score }} / {{ $attempt->total }}</td>
-                        <td>{{ $attempt->percentage() }}%</td>
-                        <td>{{ $attempt->created_at->format('M d, Y') }} {{ $attempt->created_at->format('g:i A') }}</td>
+                        <td class="ec-stack-title">{{ $attempt->quiz->title }}</td>
+                        <td data-label="Score">{{ $attempt->score }} / {{ $attempt->total }}</td>
+                        <td data-label="Percentage">{{ $attempt->percentage() }}%</td>
+                        <td data-label="Date">{{ $attempt->created_at->format('M d, Y') }} {{ $attempt->created_at->format('g:i A') }}</td>
                         <td><a href="{{ route('attempts.show', $attempt) }}">View answers</a></td>
                     </tr>
                 @empty

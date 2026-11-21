@@ -42,8 +42,7 @@ class DashboardController extends Controller
         return [
             'modules' => Module::where('grade_level', $user->grade_level)->latest()->take(5)->get(),
             // Published quizzes of the student's grade that they have not taken yet.
-            'quizzes' => Quiz::where('is_published', true)
-                ->where('grade_level', $user->grade_level)
+            'quizzes' => Quiz::openTo($user)
                 ->whereDoesntHave('attempts', fn ($query) => $query->where('user_id', $user->id))
                 ->withCount('questions')
                 ->latest()

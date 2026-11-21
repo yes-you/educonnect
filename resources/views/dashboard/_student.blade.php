@@ -36,6 +36,13 @@
     </div>
 </div>
 
+<section class="card" aria-labelledby="student-progress">
+    <div class="card-body">
+        <h2 id="student-progress" class="h5">My quiz progress</h2>
+        @include('dashboard._progress', ['progress' => $progress])
+    </div>
+</section>
+
 <section class="card" aria-labelledby="student-attempts">
     <div class="card-body">
         <h2 id="student-attempts" class="h5">My recent results</h2>

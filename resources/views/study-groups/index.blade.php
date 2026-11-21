@@ -3,7 +3,7 @@
 @section('title', 'Study groups')
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
         <h1 class="h3 mb-0">Study groups</h1>
         <a href="{{ route('study-groups.create') }}" class="btn btn-primary">
             <i class="bi bi-plus-lg" aria-hidden="true"></i> New group

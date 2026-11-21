@@ -33,6 +33,67 @@
         button.addEventListener('themechange', sync);
     });
 
+    // Text size (A-, A, A+) and high contrast. Both are remembered in localStorage;
+    // if storage is blocked the buttons still work, they just are not remembered.
+    var SIZES = ['100', '115', '130'];
+
+    var load = function (key) {
+        try { return localStorage.getItem(key); } catch (e) { return null; }
+    };
+    var save = function (key, value) {
+        try { localStorage.setItem(key, value); } catch (e) { /* storage blocked: skip saving */ }
+    };
+
+    var applySize = function (size) {
+        if (SIZES.indexOf(size) === -1) { size = '100'; }
+        root.style.setProperty('--ec-font-scale', size + '%');
+        document.querySelectorAll('[data-font-scale]').forEach(function (button) {
+            var on = button.getAttribute('data-font-scale') === size;
+            button.setAttribute('aria-pressed', on ? 'true' : 'false');
+            button.classList.toggle('active', on);
+        });
+    };
+
+    var applyContrast = function (on) {
+        root.classList.toggle('high-contrast', on);
+        document.querySelectorAll('[data-contrast-toggle]').forEach(function (button) {
+            button.setAttribute('aria-pressed', on ? 'true' : 'false');
+            button.classList.toggle('active', on);
+        });
+    };
+
+    applySize(load('ec-font-scale'));
+    applyContrast(load('ec-high-contrast') === '1');
+
+    document.querySelectorAll('[data-font-scale]').forEach(function (button) {
+        button.addEventListener('click', function () {
+            var size = button.getAttribute('data-font-scale');
+            applySize(size);
+            save('ec-font-scale', size);
+        });
+    });
+
+    document.querySelectorAll('[data-contrast-toggle]').forEach(function (button) {
+        button.addEventListener('click', function () {
+            var on = !root.classList.contains('high-contrast');
+            applyContrast(on);
+            save('ec-high-contrast', on ? '1' : '0');
+        });
+    });
+
+    // Link each field that has an error to its message, so a screen reader reads the error with the field.
+    document.querySelectorAll('.is-invalid').forEach(function (field, index) {
+        var message = field.nextElementSibling;
+        while (message && !message.classList.contains('invalid-feedback')) {
+            message = message.nextElementSibling;
+        }
+        if (!message) { return; }
+
+        if (!message.id) { message.id = (field.id || 'field-' + index) + '-error'; }
+        field.setAttribute('aria-describedby', message.id);
+        field.setAttribute('aria-invalid', 'true');
+    });
+
     // Flash messages (saved, published, approved...) fade away on their own.
     // The timer pauses while the pointer or keyboard focus is on the box, so it can be read.
     document.querySelectorAll('[data-auto-dismiss]').forEach(function (box) {

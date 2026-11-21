@@ -3,7 +3,7 @@
 @section('title', 'Announcements')
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
         <h1 class="h3 mb-0">Announcements</h1>
         @if (auth()->user()->hasRole('teacher', 'admin'))
             <a href="{{ route('announcements.create') }}" class="btn btn-primary">

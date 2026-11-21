@@ -18,6 +18,7 @@
 - Multiple-choice quizzes are scored by the server, so students get instant feedback and cannot change their score from the browser.
 - Correct answers are never sent to the quiz page, so they cannot be read from the page source.
 - Files download through a controller route so only logged-in users get them and the original file name is kept.
+- A quiz can be attempted only once per student: the controller shows the first result on a repeat try, and a unique index on the quiz and student makes the database refuse a second attempt even if the page is submitted twice at once.
 
 ## Phase 4 — School-parent communication
 - A parent sees grades only through the parent_student link that the admin confirms, so a stranger cannot claim a child and read their grades.
@@ -41,3 +42,14 @@
 - An admin cannot change their own role, so the school cannot be left with no admin by accident.
 - The audience rule for announcements lives in one place (a model scope), so the dashboard and the announcements page can never disagree about who sees what.
 - A parent is linked to a child only by the admin on the Parent Links page, and that link is what lets the parent see the child's grades.
+
+## Phase 8 — Accessibility and mobile pass
+- Text size and contrast are user-controlled because learners with low vision need them, and the setting is saved in their browser so it stays on every page.
+- Every form input has a label so screen readers announce what each field is for, and each error message is linked to its field so it is read together with it.
+- The saved setting is applied in the page head before the page is drawn, so the page never flashes at the wrong size or colours.
+- Colours that did not reach the 4.5:1 contrast ratio (red required stars, Cancel and Delete buttons, green "Saved" text) were re-pointed at palette variables, and the result was measured in the browser in light, dark and high-contrast modes.
+- Tables sit in a scrolling wrapper that is clipped at the screen edge, so a wide table scrolls by itself and never pushes the whole page sideways on a phone.
+
+## Phase 9 — Suggested features
+- Keyword search (Objectives 1, 3 and 4): modules, forum threads and opportunities each get a title search box that works together with the existing filters, so students find learning resources, discussions and community postings faster.
+- Student progress card (Objectives 1 and 2): the student dashboard, and each child's card on the parent dashboard, show quiz attempts, the average percentage and the best score per quiz, so students and parents can see improvement and not only single results. The numbers are worked out in one method on the User model, so both dashboards always agree.

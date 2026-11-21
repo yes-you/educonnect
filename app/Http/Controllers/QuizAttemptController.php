@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\QuizAttempt;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -28,6 +29,12 @@ class QuizAttemptController extends Controller
     public function store(Request $request, Quiz $quiz): RedirectResponse
     {
         abort_unless($quiz->is_published && $quiz->grade_level === $request->user()->grade_level, 404);
+
+        // A quiz can be attempted only once: a second try just shows the first result.
+        if ($existing = $quiz->attemptBy($request->user())) {
+            return redirect()->route('attempts.show', $existing)
+                ->with('error', 'You have already taken this quiz. Here is your result.');
+        }
 
         $questions = $quiz->questions;
 
@@ -53,13 +60,18 @@ class QuizAttemptController extends Controller
             }
         }
 
-        $attempt = QuizAttempt::create([
-            'quiz_id' => $quiz->id,
-            'user_id' => $request->user()->id,
-            'score' => $score,
-            'total' => $questions->count(),
-            'answers' => $answers,
-        ]);
+        try {
+            $attempt = QuizAttempt::create([
+                'quiz_id' => $quiz->id,
+                'user_id' => $request->user()->id,
+                'score' => $score,
+                'total' => $questions->count(),
+                'answers' => $answers,
+            ]);
+        } catch (UniqueConstraintViolationException) {
+            // Two submits at the same moment: the database kept only the first.
+            return redirect()->route('attempts.index')->with('error', 'You have already taken this quiz.');
+        }
 
         return redirect()->route('attempts.show', $attempt)
             ->with('success', 'You scored '.$score.' out of '.$questions->count().'.');

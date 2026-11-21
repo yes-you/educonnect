@@ -42,4 +42,10 @@ class Quiz extends Model
     {
         return $this->hasMany(QuizAttempt::class);
     }
+
+    // The user's one attempt at this quiz, or null if they have not taken it yet.
+    public function attemptBy(User $user): ?QuizAttempt
+    {
+        return $this->attempts()->where('user_id', $user->id)->first();
+    }
 }

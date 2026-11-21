@@ -21,6 +21,7 @@ class ModuleController extends Controller
         $gradeLevel = $user->hasRole('student') ? $user->grade_level : $request->input('grade_level');
 
         $modules = Module::with('teacher')
+            ->when($request->filled('q'), fn ($query) => $query->where('title', 'like', '%'.$request->q.'%'))
             ->when($request->filled('subject'), fn ($query) => $query->where('subject', 'like', '%'.$request->subject.'%'))
             ->when($gradeLevel, fn ($query) => $query->where('grade_level', $gradeLevel))
             ->when($request->filled('type'), fn ($query) => $query->where('type', $request->type))

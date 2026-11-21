@@ -14,7 +14,7 @@
                 @csrf
 
                 <div class="col-md-5">
-                    <label for="parent_id" class="form-label">Parent <span class="text-danger">*</span></label>
+                    <label for="parent_id" class="form-label">Parent <span class="text-danger" aria-hidden="true">*</span></label>
                     <select id="parent_id" name="parent_id" class="form-select @error('parent_id') is-invalid @enderror" required>
                         <option value="">Select parent</option>
                         @foreach ($parents as $parent)
@@ -27,7 +27,7 @@
                 </div>
 
                 <div class="col-md-5">
-                    <label for="student_id" class="form-label">Student <span class="text-danger">*</span></label>
+                    <label for="student_id" class="form-label">Student <span class="text-danger" aria-hidden="true">*</span></label>
                     <select id="student_id" name="student_id" class="form-select @error('student_id') is-invalid @enderror" required>
                         <option value="">Select student</option>
                         @foreach ($students as $student)

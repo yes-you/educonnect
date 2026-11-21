@@ -27,6 +27,9 @@
                     @endforelse
                 </div>
             </div>
+
+            <h3 class="h6 mt-3">Quiz progress</h3>
+            @include('dashboard._progress', ['progress' => $progress[$child->id]])
         </div>
     </section>
 @empty

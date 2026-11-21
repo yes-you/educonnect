@@ -3,7 +3,7 @@
 @section('title', 'Modules')
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
         <h1 class="h3 mb-0">Modules and study guides</h1>
         @if (auth()->user()->hasRole('teacher', 'admin'))
             <a href="{{ route('modules.create') }}" class="btn btn-primary">
@@ -13,12 +13,16 @@
     </div>
 
     <form method="GET" action="{{ route('modules.index') }}" class="row g-2 align-items-end mb-3">
-        <div class="col-md-4">
+        <div class="col-md-12 col-lg-4">
+            <label for="q" class="form-label">Search by title</label>
+            <input type="search" id="q" name="q" class="form-control" value="{{ request('q') }}">
+        </div>
+        <div class="col-md-4 col-lg-2">
             <label for="subject" class="form-label">Subject</label>
             <input type="text" id="subject" name="subject" class="form-control" value="{{ request('subject') }}">
         </div>
         @unless (auth()->user()->hasRole('student'))
-            <div class="col-md-3">
+            <div class="col-md-4 col-lg-2">
                 <label for="grade_level" class="form-label">Grade level</label>
                 <select id="grade_level" name="grade_level" class="form-select">
                     <option value="">All grades</option>
@@ -28,7 +32,7 @@
                 </select>
             </div>
         @endunless
-        <div class="col-md-3">
+        <div class="col-md-4 col-lg-2">
             <label for="type" class="form-label">Type</label>
             <select id="type" name="type" class="form-select">
                 <option value="">All types</option>
@@ -37,7 +41,7 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-md-2 d-grid">
+        <div class="col-md-12 col-lg-2 d-grid">
             <button type="submit" class="btn btn-outline-primary">Filter</button>
         </div>
     </form>

@@ -54,6 +54,25 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'parent_student', 'parent_id', 'student_id');
     }
 
+    // Quiz progress: attempts, average percentage and best score for each quiz, plus overall totals.
+    public function quizProgress(): array
+    {
+        $attempts = $this->quizAttempts()->with('quiz')->get();
+
+        $quizzes = $attempts->groupBy('quiz_id')->map(fn ($group) => [
+            'quiz' => $group->first()->quiz,
+            'attempts' => $group->count(),
+            'average' => (int) round($group->avg(fn ($attempt) => $attempt->percentage()) ?? 0),
+            'best' => $group->sortByDesc(fn ($attempt) => $attempt->percentage())->first(),
+        ]);
+
+        return [
+            'attempts' => $attempts->count(),
+            'average' => (int) round($attempts->avg(fn ($attempt) => $attempt->percentage()) ?? 0),
+            'quizzes' => $quizzes,
+        ];
+    }
+
     // A student's parents.
     public function parents(): BelongsToMany
     {

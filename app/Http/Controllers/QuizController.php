@@ -27,14 +27,23 @@ class QuizController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('quizzes.index', compact('quizzes'));
+        // A student's own attempts by quiz id, so the list can show their result next to each quiz.
+        $attempts = $user->hasRole('student') ? $user->quizAttempts()->get()->keyBy('quiz_id') : collect();
+
+        return view('quizzes.index', compact('quizzes', 'attempts'));
     }
 
-    public function show(Request $request, Quiz $quiz): View
+    public function show(Request $request, Quiz $quiz): View|RedirectResponse
     {
         if ($request->user()->hasRole('student')) {
             // Unpublished quizzes and quizzes of another grade level do not exist for a student.
             abort_unless($quiz->is_published && $quiz->grade_level === $request->user()->grade_level, 404);
+
+            // A quiz can be attempted only once: if it is already taken, show the result instead.
+            if ($attempt = $quiz->attemptBy($request->user())) {
+                return redirect()->route('attempts.show', $attempt)
+                    ->with('error', 'You have already taken this quiz. Here is your result.');
+            }
 
             // Leave correct_option out of the query so it can never reach the page.
             $questions = $quiz->questions()

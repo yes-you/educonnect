@@ -5,7 +5,9 @@ namespace Tests\Feature;
 use App\Models\Module;
 use App\Models\Question;
 use App\Models\Quiz;
+use App\Models\QuizAttempt;
 use App\Models\User;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -38,6 +40,51 @@ class QuizScoringTest extends TestCase
             'score' => 2,
             'total' => 3,
         ]);
+    }
+
+    public function test_a_quiz_can_only_be_attempted_once(): void
+    {
+        $quiz = $this->quizWithThreeQuestions();
+        $student = User::factory()->create();
+        [$q1, $q2, $q3] = $quiz->questions;
+
+        $this->actingAs($student)->post(route('attempts.store', $quiz), [
+            'answers' => [$q1->id => 'a', $q2->id => 'a', $q3->id => 'b'],
+        ]);
+        $first = $student->quizAttempts()->first();
+
+        // A second submit, even with better answers, keeps the first result and saves nothing new.
+        $this->post(route('attempts.store', $quiz), [
+            'answers' => [$q1->id => 'a', $q2->id => 'a', $q3->id => 'a'],
+        ])->assertRedirect(route('attempts.show', $first))->assertSessionHas('error');
+
+        $this->assertDatabaseCount('quiz_attempts', 1);
+        $this->assertSame(2, $first->fresh()->score);
+
+        // Opening the quiz again shows the result, not the questions.
+        $this->get(route('quizzes.show', $quiz))->assertRedirect(route('attempts.show', $first));
+
+        // The quiz list shows the result instead of "Not taken yet".
+        $this->get(route('quizzes.index'))->assertOk()->assertSee('2 / 3 (67%)')->assertDontSee('Not taken yet');
+
+        // Another student can still take the same quiz.
+        $this->actingAs(User::factory()->create())
+            ->get(route('quizzes.show', $quiz))
+            ->assertOk()
+            ->assertSee('Submit answers');
+    }
+
+    public function test_database_itself_rejects_a_second_attempt(): void
+    {
+        $quiz = $this->quizWithThreeQuestions();
+        $student = User::factory()->create();
+        $row = ['quiz_id' => $quiz->id, 'user_id' => $student->id, 'score' => 1, 'total' => 3, 'answers' => []];
+
+        QuizAttempt::create($row);
+
+        // Covers two submits at the same moment, where the controller check cannot help.
+        $this->expectException(UniqueConstraintViolationException::class);
+        QuizAttempt::create($row);
     }
 
     public function test_missing_answer_is_rejected(): void

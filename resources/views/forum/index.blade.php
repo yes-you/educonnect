@@ -3,12 +3,22 @@
 @section('title', 'Forum')
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
         <h1 class="h3 mb-0">Discussion forum</h1>
         <a href="{{ route('threads.create') }}" class="btn btn-primary">
             <i class="bi bi-plus-lg" aria-hidden="true"></i> New thread
         </a>
     </div>
+
+    <form method="GET" action="{{ route('threads.index') }}" class="row g-2 align-items-end mb-3">
+        <div class="col-md-6">
+            <label for="q" class="form-label">Search threads by title</label>
+            <input type="search" id="q" name="q" class="form-control" value="{{ request('q') }}">
+        </div>
+        <div class="col-md-2 d-grid">
+            <button type="submit" class="btn btn-outline-primary">Search</button>
+        </div>
+    </form>
 
     <div class="table-responsive">
         <table class="table table-hover align-middle">

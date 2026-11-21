@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="col-md-4 mb-3">
-        <label for="type" class="form-label">Type <span class="text-danger">*</span></label>
+        <label for="type" class="form-label">Type <span class="text-danger" aria-hidden="true">*</span></label>
         <select id="type" name="type" class="form-select @error('type') is-invalid @enderror" required>
             <option value="">Select type</option>
             @foreach (\App\Models\Opportunity::TYPES as $type)
@@ -13,7 +13,7 @@
     </div>
 
     <div class="col-md-8 mb-3">
-        <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
+        <label for="title" class="form-label">Title <span class="text-danger" aria-hidden="true">*</span></label>
         <input type="text" id="title" name="title" class="form-control @error('title') is-invalid @enderror"
                value="{{ old('title', $opportunity->title) }}" required>
         @error('title') <div class="invalid-feedback">{{ $message }}</div> @enderror
@@ -21,7 +21,7 @@
 </div>
 
 <div class="mb-3">
-    <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
+    <label for="description" class="form-label">Description <span class="text-danger" aria-hidden="true">*</span></label>
     <textarea id="description" name="description" rows="5"
               class="form-control @error('description') is-invalid @enderror" required>{{ old('description', $opportunity->description) }}</textarea>
     @error('description') <div class="invalid-feedback">{{ $message }}</div> @enderror

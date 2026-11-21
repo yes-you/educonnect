@@ -7,7 +7,11 @@
     <p class="text-body-secondary">Scholarships, tutoring programs and events from local organizations.</p>
 
     <form method="GET" action="{{ route('opportunities.index') }}" class="row g-2 align-items-end mb-3">
-        <div class="col-md-4">
+        <div class="col-md-5">
+            <label for="q" class="form-label">Search by title</label>
+            <input type="search" id="q" name="q" class="form-control" value="{{ request('q') }}">
+        </div>
+        <div class="col-md-3">
             <label for="type" class="form-label">Type</label>
             <select id="type" name="type" class="form-select">
                 <option value="">All types</option>

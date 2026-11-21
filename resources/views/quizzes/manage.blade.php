@@ -90,7 +90,7 @@
         @include('partials.form-errors')
 
         <div class="mb-3">
-            <label for="question" class="form-label">Question <span class="text-danger">*</span></label>
+            <label for="question" class="form-label">Question <span class="text-danger" aria-hidden="true">*</span></label>
             <textarea id="question" name="question" rows="2" class="form-control @error('question') is-invalid @enderror" required>{{ old('question') }}</textarea>
             @error('question') <div class="invalid-feedback">{{ $message }}</div> @enderror
         </div>
@@ -98,7 +98,7 @@
         <div class="row">
             @foreach (\App\Models\Question::OPTIONS as $option)
                 <div class="col-md-6 mb-3">
-                    <label for="option_{{ $option }}" class="form-label">Option {{ strtoupper($option) }} <span class="text-danger">*</span></label>
+                    <label for="option_{{ $option }}" class="form-label">Option {{ strtoupper($option) }} <span class="text-danger" aria-hidden="true">*</span></label>
                     <input type="text" id="option_{{ $option }}" name="option_{{ $option }}"
                            class="form-control @error('option_'.$option) is-invalid @enderror"
                            value="{{ old('option_'.$option) }}" required>
@@ -108,7 +108,7 @@
         </div>
 
         <div class="mb-3 col-md-4">
-            <label for="correct_option" class="form-label">Correct answer <span class="text-danger">*</span></label>
+            <label for="correct_option" class="form-label">Correct answer <span class="text-danger" aria-hidden="true">*</span></label>
             <select id="correct_option" name="correct_option" class="form-select @error('correct_option') is-invalid @enderror" required>
                 <option value="">Select</option>
                 @foreach (\App\Models\Question::OPTIONS as $option)

@@ -10,10 +10,11 @@ use Illuminate\View\View;
 
 class ForumThreadController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
         $threads = ForumThread::with('author')
             ->withCount('replies')
+            ->when($request->filled('q'), fn ($query) => $query->where('title', 'like', '%'.$request->q.'%'))
             ->latest()
             ->paginate(10)
             ->withQueryString();

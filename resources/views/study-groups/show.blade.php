@@ -68,7 +68,7 @@
             @include('partials.form-errors')
 
             <div class="mb-3">
-                <label for="body" class="form-label">Message <span class="text-danger">*</span></label>
+                <label for="body" class="form-label">Message <span class="text-danger" aria-hidden="true">*</span></label>
                 <textarea id="body" name="body" rows="3" class="form-control @error('body') is-invalid @enderror" required>{{ old('body') }}</textarea>
                 @error('body') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>

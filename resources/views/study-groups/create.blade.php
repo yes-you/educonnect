@@ -11,7 +11,7 @@
 
         <div class="row">
             <div class="col-md-8 mb-3">
-                <label for="name" class="form-label">Group name <span class="text-danger">*</span></label>
+                <label for="name" class="form-label">Group name <span class="text-danger" aria-hidden="true">*</span></label>
                 <input type="text" id="name" name="name" class="form-control @error('name') is-invalid @enderror"
                        value="{{ old('name') }}" required>
                 @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror

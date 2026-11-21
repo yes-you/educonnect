@@ -50,6 +50,7 @@ class DashboardController extends Controller
                 ->take(5)
                 ->get(),
             'attempts' => $user->quizAttempts()->with('quiz')->latest()->take(5)->get(),
+            'progress' => $user->quizProgress(),
         ];
     }
 
@@ -58,12 +59,15 @@ class DashboardController extends Controller
         // Only children linked to this parent in parent_student.
         $children = $user->children()->orderBy('name')->get();
 
+        $progress = [];
+
         foreach ($children as $child) {
             $child->setRelation('latestGrades', $child->grades()->latest()->take(5)->get());
             $child->setRelation('latestAttempts', $child->quizAttempts()->with('quiz')->latest()->take(3)->get());
+            $progress[$child->id] = $child->quizProgress();
         }
 
-        return ['children' => $children];
+        return ['children' => $children, 'progress' => $progress];
     }
 
     private function teacherData(User $user): array

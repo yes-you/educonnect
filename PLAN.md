@@ -13,7 +13,7 @@ Builder: Quit, solo. Mode: one phase at a time, stop after each phase (see CLAUD
 - [x] Phase 5 — Collaborative learning (forum, study groups)
 - [x] Phase 6 — Community opportunities
 - [x] Phase 7 — Role dashboards and admin panel
-- [ ] Phase 8 — Accessibility and mobile pass
+- [x] Phase 8 — Accessibility and mobile pass
 - [ ] Phase 9 — Suggested features
 - [ ] Phase 10 — Demo data, final checks, handover
 

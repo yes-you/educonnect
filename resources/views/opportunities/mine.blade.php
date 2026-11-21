@@ -3,7 +3,7 @@
 @section('title', 'My postings')
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
         <h1 class="h3 mb-0">My postings</h1>
         <a href="{{ route('opportunities.create') }}" class="btn btn-primary">
             <i class="bi bi-plus-lg" aria-hidden="true"></i> New posting

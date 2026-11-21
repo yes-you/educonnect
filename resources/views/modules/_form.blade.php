@@ -1,7 +1,7 @@
 @include('partials.form-errors')
 
 <div class="mb-3">
-    <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
+    <label for="title" class="form-label">Title <span class="text-danger" aria-hidden="true">*</span></label>
     <input type="text" id="title" name="title" class="form-control @error('title') is-invalid @enderror"
            value="{{ old('title', $module->title) }}" required>
     @error('title') <div class="invalid-feedback">{{ $message }}</div> @enderror
@@ -9,14 +9,14 @@
 
 <div class="row">
     <div class="col-md-4 mb-3">
-        <label for="subject" class="form-label">Subject <span class="text-danger">*</span></label>
+        <label for="subject" class="form-label">Subject <span class="text-danger" aria-hidden="true">*</span></label>
         <input type="text" id="subject" name="subject" class="form-control @error('subject') is-invalid @enderror"
                value="{{ old('subject', $module->subject) }}" required>
         @error('subject') <div class="invalid-feedback">{{ $message }}</div> @enderror
     </div>
 
     <div class="col-md-4 mb-3">
-        <label for="grade_level" class="form-label">Grade level <span class="text-danger">*</span></label>
+        <label for="grade_level" class="form-label">Grade level <span class="text-danger" aria-hidden="true">*</span></label>
         <select id="grade_level" name="grade_level" class="form-select @error('grade_level') is-invalid @enderror" required>
             <option value="">Select grade level</option>
             @foreach (\App\Models\User::GRADE_LEVELS as $level)
@@ -27,7 +27,7 @@
     </div>
 
     <div class="col-md-4 mb-3">
-        <label for="type" class="form-label">Type <span class="text-danger">*</span></label>
+        <label for="type" class="form-label">Type <span class="text-danger" aria-hidden="true">*</span></label>
         <select id="type" name="type" class="form-select @error('type') is-invalid @enderror" required>
             @foreach (\App\Models\Module::TYPES as $type)
                 <option value="{{ $type }}" @selected(old('type', $module->type) === $type)>{{ ucfirst(str_replace('_', ' ', $type)) }}</option>
@@ -47,7 +47,7 @@
 <div class="mb-3">
     <label for="file" class="form-label">
         File (PDF, Word or PowerPoint, up to 20 MB)
-        @if (! $module->exists) <span class="text-danger">*</span> @endif
+        @if (! $module->exists) <span class="text-danger" aria-hidden="true">*</span> @endif
     </label>
     <input type="file" id="file" name="file" class="form-control @error('file') is-invalid @enderror"
            accept=".pdf,.doc,.docx,.ppt,.pptx" @required(! $module->exists)>

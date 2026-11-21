@@ -6,6 +6,8 @@
     <script>try{document.documentElement.setAttribute("data-bs-theme",localStorage.getItem("ec-theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"))}catch(e){}</script>
     {{-- Apply the saved text size and high contrast before the page paints, so it never flashes. --}}
     <script>try{var r=document.documentElement,s=localStorage.getItem("ec-font-scale");if(["100","115","130"].indexOf(s)>-1)r.style.setProperty("--ec-font-scale",s+"%");if(localStorage.getItem("ec-high-contrast")==="1")r.classList.add("high-contrast")}catch(e){}</script>
+    <link rel="icon" href="{{ asset('favicon.svg') }}?v={{ filemtime(public_path('favicon.svg')) }}" type="image/svg+xml">
+    <link rel="icon" href="{{ asset('favicon.ico') }}?v={{ filemtime(public_path('favicon.ico')) }}" sizes="48x48">
     <title>EduConnect</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">

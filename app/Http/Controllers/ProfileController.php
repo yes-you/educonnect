@@ -52,7 +52,7 @@ class ProfileController extends Controller
         // The database refuses to delete a teacher who still owns grades, quizzes or modules.
         if ($user->modules()->exists() || $user->quizzes()->exists() || Grade::where('teacher_id', $user->id)->exists()) {
             return back()->withErrors(
-                ['password' => 'You still own grades, quizzes or modules. Ask an admin to reassign them first.'],
+                ['password' => 'This account cannot be deleted while it still owns grades, quizzes or modules.'],
                 'userDeletion'
             );
         }

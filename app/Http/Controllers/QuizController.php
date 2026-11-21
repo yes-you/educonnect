@@ -106,6 +106,11 @@ class QuizController extends Controller
     {
         Gate::authorize('delete', $quiz);
 
+        // Deleting the quiz would also delete every student's result.
+        if ($quiz->attempts()->exists()) {
+            return back()->with('error', 'Students already took this quiz, so it cannot be deleted. Move it back to draft instead.');
+        }
+
         $quiz->delete();
 
         return redirect()->route('quizzes.index')->with('success', 'Quiz deleted.');

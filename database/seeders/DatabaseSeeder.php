@@ -10,11 +10,11 @@ class DatabaseSeeder extends Seeder
     use WithoutModelEvents;
 
     /**
-     * Seed the application's database.
-     * Demo content is added in Phase 10.
+     * Seed the application's database: the six accounts first, then demo content that uses them.
      */
     public function run(): void
     {
         $this->call(UserSeeder::class);
+        $this->call(DemoContentSeeder::class);
     }
 }

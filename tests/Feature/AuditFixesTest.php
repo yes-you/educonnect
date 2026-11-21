@@ -51,6 +51,28 @@ class AuditFixesTest extends TestCase
         $this->assertDatabaseCount('questions', 1);
     }
 
+    public function test_quiz_with_attempts_cannot_be_deleted_or_change_grade_level(): void
+    {
+        $teacher = User::factory()->teacher()->create();
+        $quiz = Quiz::factory()->published()->create(['teacher_id' => $teacher->id, 'grade_level' => 'Grade 10']);
+        QuizAttempt::create([
+            'quiz_id' => $quiz->id,
+            'user_id' => User::factory()->create()->id,
+            'score' => 0,
+            'total' => 1,
+            'answers' => [],
+        ]);
+
+        $this->actingAs($teacher)->delete(route('quizzes.destroy', $quiz))->assertSessionHas('error');
+        $this->assertModelExists($quiz);
+        $this->assertDatabaseCount('quiz_attempts', 1);
+
+        $this->actingAs($teacher)->patch(route('quizzes.update', $quiz), [
+            'title' => $quiz->title, 'subject' => $quiz->subject, 'grade_level' => 'Grade 8',
+        ])->assertSessionHas('error');
+        $this->assertSame('Grade 10', $quiz->fresh()->grade_level);
+    }
+
     public function test_student_of_another_grade_cannot_open_or_download_a_module(): void
     {
         $student = User::factory()->create(['grade_level' => 'Grade 10']);

@@ -55,3 +55,9 @@
 - Student progress card (Objectives 1 and 2): the student dashboard, and each child's card on the parent dashboard, show quiz attempts, the average percentage and the best score per quiz, so students and parents can see improvement and not only single results. The numbers are worked out in one method on the User model, so both dashboards always agree.
 - Printable report card (Objective 2): a student, their linked parents, teachers and admin can open a clean one-page report with the subject-by-quarter grades, a final grade per subject and the general average, and print it from the browser. It uses its own simple black-on-white page so it prints well, and the access rule lives in GradePolicy, so a parent can never open a report for a child who is not linked to them.
 - "New" announcements badge (Objective 2): the navbar shows how many announcements meant for the user arrived since they last opened the Announcements page, so parents and students notice school messages without checking. The last-seen time is one nullable column on the user, the count follows the same audience rule as the announcements page, and a user's own announcements never count for them.
+
+## Phase 10 — Demo data, final checks, handover
+- Demo content lives in its own seeder that runs after the account seeder: a fresh install shows something on every page, and the six accounts stay separate from the sample content.
+- The sample PDF is written by plain PHP (a header, five objects, a cross-reference table and a trailer), so demo downloads work without installing a PDF package.
+- A sweep test lists pages each role must never open (and guests must be sent to log in for), so the rules a professor tests are checked by the test suite, not only by hand.
+- The README gives the exact XAMPP steps, the demo accounts, the test and backup commands, and the future enhancements, so someone new can run the project from scratch.

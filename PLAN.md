@@ -15,7 +15,7 @@ Builder: Quit, solo. Mode: one phase at a time, stop after each phase (see CLAUD
 - [x] Phase 7 — Role dashboards and admin panel
 - [x] Phase 8 — Accessibility and mobile pass
 - [x] Phase 9 — Suggested features (features 1 to 4 built; feature 5, saved modules, skipped)
-- [ ] Phase 10 — Demo data, final checks, handover
+- [x] Phase 10 — Demo data, final checks, handover
 
 Rough time per phase: P0 45m · P1 45m · P2 45m · P3 1h45m · P4 1h30m · P5 1h15m · P6 45m · P7 1h · P8 45m · P9 1h · P10 45m (about 11 hours).
 

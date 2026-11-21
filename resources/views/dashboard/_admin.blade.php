@@ -1,4 +1,4 @@
-<div class="row mt-3">
+<div class="row g-3 mb-3 mt-0">
     <div class="col-lg-6">
         <section class="card h-100" aria-labelledby="admin-users">
             <div class="card-body">

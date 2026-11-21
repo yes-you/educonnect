@@ -1052,3 +1052,25 @@ html.high-contrast {
     border-color: var(--ec-brand);
     color: #fff;
 }
+
+/* ---------- Dashboard card rows and password toggle ---------- */
+
+/* Equal-height cards in a row: the row's gap spaces them, so the card's own bottom margin is dropped. */
+.row > [class*="col"] > .card.h-100 {
+    margin-bottom: 0;
+}
+
+/* Show/hide button joined to a password field. */
+.ec-pw-toggle {
+    min-width: 2.75rem;
+    color: var(--ec-muted);
+    border-color: var(--bs-border-color);
+    background: var(--bs-body-bg);
+}
+
+.ec-pw-toggle:hover,
+.ec-pw-toggle:focus-visible {
+    color: var(--ec-link);
+    background: var(--ec-brand-soft);
+    border-color: var(--bs-border-color);
+}

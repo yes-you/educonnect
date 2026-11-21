@@ -99,6 +99,34 @@
         field.setAttribute('aria-invalid', 'true');
     });
 
+    // Every password field gets a "show password" button, so typos can be spotted.
+    document.querySelectorAll('input[type="password"]').forEach(function (field) {
+        var group = document.createElement('div');
+        group.className = 'input-group';
+        field.parentNode.insertBefore(group, field);
+        group.appendChild(field);
+
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'btn ec-pw-toggle';
+        button.setAttribute('aria-pressed', 'false');
+        button.setAttribute('aria-label', 'Show password');
+        button.innerHTML = '<i class="bi bi-eye" aria-hidden="true"></i>';
+        group.appendChild(button);
+
+        // The error message was a sibling of the field; keep it visible now the field sits in a group.
+        var next = group.nextElementSibling;
+        if (next && next.classList.contains('invalid-feedback')) { next.classList.add('d-block'); }
+
+        button.addEventListener('click', function () {
+            var show = field.type === 'password';
+            field.type = show ? 'text' : 'password';
+            button.setAttribute('aria-pressed', show ? 'true' : 'false');
+            button.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+            button.firstChild.className = show ? 'bi bi-eye-slash' : 'bi bi-eye';
+        });
+    });
+
     // Flash messages (saved, published, approved...) fade away on their own.
     // The timer pauses while the pointer or keyboard focus is on the box, so it can be read.
     document.querySelectorAll('[data-auto-dismiss]').forEach(function (box) {

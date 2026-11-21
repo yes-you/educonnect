@@ -30,7 +30,29 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'role' => 'student',
+            'grade_level' => 'Grade 10',
         ];
+    }
+
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes) => ['role' => 'admin', 'grade_level' => null]);
+    }
+
+    public function teacher(): static
+    {
+        return $this->state(fn (array $attributes) => ['role' => 'teacher', 'grade_level' => null]);
+    }
+
+    public function parent(): static
+    {
+        return $this->state(fn (array $attributes) => ['role' => 'parent', 'grade_level' => null]);
+    }
+
+    public function organization(): static
+    {
+        return $this->state(fn (array $attributes) => ['role' => 'organization', 'grade_level' => null]);
     }
 
     /**

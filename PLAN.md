@@ -6,13 +6,13 @@ Builder: Quit, solo. Mode: one phase at a time, stop after each phase (see CLAUD
 ## Progress
 
 - [x] Phase 0 — Install and configure
-- [ ] Phase 1 — Layout, roles, registration
-- [ ] Phase 2 — Database: all tables, models, relationships, accounts
-- [ ] Phase 3 — Learning resources (modules, study guides, quizzes)
-- [ ] Phase 4 — School-parent communication (announcements, grades, schedules)
-- [ ] Phase 5 — Collaborative learning (forum, study groups)
-- [ ] Phase 6 — Community opportunities
-- [ ] Phase 7 — Role dashboards and admin panel
+- [x] Phase 1 — Layout, roles, registration
+- [x] Phase 2 — Database: all tables, models, relationships, accounts
+- [x] Phase 3 — Learning resources (modules, study guides, quizzes)
+- [x] Phase 4 — School-parent communication (announcements, grades, schedules)
+- [x] Phase 5 — Collaborative learning (forum, study groups)
+- [x] Phase 6 — Community opportunities
+- [x] Phase 7 — Role dashboards and admin panel
 - [ ] Phase 8 — Accessibility and mobile pass
 - [ ] Phase 9 — Suggested features
 - [ ] Phase 10 — Demo data, final checks, handover

@@ -1,0 +1,572 @@
+/* EduConnect styles. Accessibility toggles are added in Phase 8.
+   Palette: deep teal and clear blue-teal (trust, calm, focus) with warm sand (warmth).
+   Light mode sits on soft off-white, dark mode on slate, never pure white or pure black.
+   Every colour is a variable; the dark block below only re-defines the variables. */
+
+:root {
+    /* Fixed colours: the same in both modes. */
+    --ec-deep: #0f2f3f;          /* navbar and hero background */
+    --ec-brand: #0e7490;         /* buttons, active states */
+    --ec-brand-dark: #0b5a73;
+    --ec-sand: #d8c28a;
+    --ec-sand-soft: #f7f0dc;
+    --ec-radius: 0.75rem;
+    --ec-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+    --ec-font-display: 'Newsreader', Georgia, 'Times New Roman', serif;
+
+    /* Colours that change with the theme (light values). */
+    --ec-paper: #f8fafc;         /* page background */
+    --ec-surface: #fcfdfe;       /* cards, tables, footer */
+    --ec-ink: #1e293b;           /* body text */
+    --ec-heading: #0f2f3f;       /* headings and labels */
+    --ec-muted: #526072;
+    --ec-line: #dbe5ee;
+    --ec-line-strong: #c5d3e0;   /* input borders, card hover border */
+    --ec-brand-soft: #e3f2f7;    /* tinted backgrounds */
+    --ec-link: #0e7490;          /* links and text in brand colour */
+    --ec-link-hover: #0b5a73;
+    --ec-focus: #0b5a73;        /* keyboard focus ring */
+    --ec-shadow: 0 1px 2px rgba(15, 47, 63, 0.06), 0 4px 14px rgba(15, 47, 63, 0.06);
+    --ec-shadow-lift: 0 2px 4px rgba(15, 47, 63, 0.08), 0 12px 28px rgba(15, 47, 63, 0.12);
+
+    /* Point Bootstrap's own variables at our palette so every component follows. */
+    --bs-primary: var(--ec-brand);
+    --bs-primary-rgb: 14, 116, 144;
+    --bs-link-color: var(--ec-link);
+    --bs-link-color-rgb: 14, 116, 144;
+    --bs-link-hover-color: var(--ec-link-hover);
+    --bs-link-hover-color-rgb: 11, 90, 115;
+    --bs-body-bg: var(--ec-paper);
+    --bs-body-color: var(--ec-ink);
+    --bs-body-font-family: 'Atkinson Hyperlegible Next', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --bs-border-color: var(--ec-line);
+    --bs-border-radius: 0.5rem;
+    --bs-border-radius-lg: var(--ec-radius);
+    --bs-secondary-color: var(--ec-muted);
+    --bs-emphasis-color: var(--ec-heading);
+}
+
+/* ---------- Dark mode: slate background, soft light text ---------- */
+
+[data-bs-theme="dark"] {
+    --ec-deep: #0a1e2b;
+    --ec-paper: #0f172a;
+    --ec-surface: #1e293b;
+    --ec-ink: #e2e8f0;
+    --ec-heading: #f1f5f9;
+    --ec-muted: #94a3b8;
+    --ec-line: #334155;
+    --ec-line-strong: #475569;
+    --ec-brand-soft: #123344;
+    --ec-link: #67c8de;
+    --ec-link-hover: #9ddcec;
+    --ec-focus: #67c8de;
+    --ec-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 14px rgba(0, 0, 0, 0.25);
+    --ec-shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.35), 0 12px 28px rgba(0, 0, 0, 0.4);
+
+    --bs-link-color-rgb: 103, 200, 222;
+    --bs-link-hover-color-rgb: 157, 220, 236;
+    color-scheme: dark;
+}
+
+body,
+.card,
+.table-responsive,
+.ec-footer,
+.form-control,
+.form-select {
+    transition: background-color 0.3s var(--ec-ease), color 0.3s var(--ec-ease), border-color 0.3s var(--ec-ease);
+}
+
+/* ---------- Base ---------- */
+
+body {
+    background: var(--ec-paper);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Two roles: a serif for page and section titles (academic warmth),
+   a highly legible sans for everything people read and click. */
+h1, h2, h3, .h1, .h2, .h3 {
+    font-family: var(--ec-font-display);
+    font-weight: 650;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--ec-heading);
+    text-wrap: balance;
+}
+
+h4, h5, h6, .h4, .h5, .h6 {
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--ec-heading);
+    text-wrap: balance;
+}
+
+/* Comfortable reading measure; centred blocks keep their own auto margins. */
+p {
+    max-width: 70ch;
+    text-wrap: pretty;
+}
+
+a {
+    transition: color 0.2s var(--ec-ease);
+}
+
+:focus-visible {
+    outline: 3px solid var(--ec-focus);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* On the dark teal navbar and hero the sand ring is the one with enough contrast. */
+.ec-navbar :focus-visible,
+.ec-hero :focus-visible {
+    outline-color: var(--ec-sand);
+}
+
+::selection {
+    background: var(--ec-sand-soft);
+}
+
+/* Every page eases in once on load. */
+main {
+    animation: ec-rise 0.5s var(--ec-ease) both;
+}
+
+@keyframes ec-rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* ---------- Navbar ---------- */
+
+.ec-navbar {
+    background: var(--ec-deep);
+    border-bottom: 3px solid var(--ec-sand);
+    transition: box-shadow 0.3s var(--ec-ease);
+}
+
+.ec-navbar.is-scrolled {
+    box-shadow: 0 6px 20px rgba(15, 47, 63, 0.25);
+}
+
+.ec-navbar .navbar-brand {
+    color: #fff;
+    font-family: var(--ec-font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.ec-navbar .navbar-brand .bi {
+    color: var(--ec-sand);
+    display: inline-block;
+    transition: transform 0.35s var(--ec-ease);
+}
+
+.ec-navbar .navbar-brand:hover .bi {
+    transform: rotate(-8deg) scale(1.12);
+}
+
+.ec-navbar .nav-link {
+    color: rgba(255, 255, 255, 0.78);
+    font-weight: 500;
+    position: relative;
+    transition: color 0.2s var(--ec-ease);
+}
+
+/* Underline that draws in from the left on hover and stays on the active page. */
+.ec-navbar .nav-link:not(.dropdown-toggle)::after {
+    content: '';
+    position: absolute;
+    left: 0.5rem;
+    right: 0.5rem;
+    bottom: 0.2rem;
+    height: 2px;
+    background: var(--ec-sand);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s var(--ec-ease);
+}
+
+.ec-navbar .nav-link:hover,
+.ec-navbar .nav-link:focus,
+.ec-navbar .nav-link.active,
+.ec-navbar .nav-link.show {
+    color: #fff;
+}
+
+.ec-navbar .nav-link:hover::after,
+.ec-navbar .nav-link.active::after {
+    transform: scaleX(1);
+}
+
+.ec-navbar .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.ec-navbar .navbar-toggler-icon {
+    filter: invert(1);
+}
+
+.ec-navbar .badge {
+    background: var(--ec-sand) !important;
+    color: var(--ec-deep) !important;
+    text-transform: capitalize;
+}
+
+.dropdown-menu {
+    border: 1px solid var(--ec-line);
+    border-radius: var(--ec-radius);
+    box-shadow: var(--ec-shadow-lift);
+    padding: 0.4rem;
+    animation: ec-pop 0.18s var(--ec-ease) both;
+}
+
+.dropdown-item {
+    border-radius: 0.4rem;
+    transition: background-color 0.15s var(--ec-ease), color 0.15s var(--ec-ease);
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background: var(--ec-brand-soft);
+    color: var(--ec-link);
+}
+
+@keyframes ec-pop {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* ---------- Cards ---------- */
+
+.card {
+    margin-bottom: 1rem;
+    border: 1px solid var(--ec-line);
+    border-radius: var(--ec-radius);
+    box-shadow: var(--ec-shadow);
+    background: var(--ec-surface);
+    transition: transform 0.25s var(--ec-ease), box-shadow 0.25s var(--ec-ease), border-color 0.25s var(--ec-ease);
+}
+
+/* Only decorative showcase cards lift; content and form cards stay still so nothing looks clickable by mistake. */
+.ec-card-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--ec-shadow-lift);
+    border-color: var(--ec-line-strong);
+}
+
+.card-header {
+    background: var(--ec-brand-soft);
+    border-bottom: 1px solid var(--ec-line);
+    font-weight: 600;
+    color: var(--ec-heading);
+}
+
+/* Icon tile used on the home page and dashboard. */
+.ec-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-bottom: 0.75rem;
+    border-radius: 0.75rem;
+    background: var(--ec-brand-soft);
+    color: var(--ec-link);
+    font-size: 1.35rem;
+    transition: background-color 0.25s var(--ec-ease), color 0.25s var(--ec-ease), transform 0.25s var(--ec-ease);
+}
+
+.ec-card-lift:hover .ec-icon {
+    background: var(--ec-brand);
+    color: #fff;
+    transform: scale(1.06);
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+    font-weight: 600;
+    border-radius: 0.55rem;
+    transition: transform 0.15s var(--ec-ease), box-shadow 0.2s var(--ec-ease),
+                background-color 0.2s var(--ec-ease), border-color 0.2s var(--ec-ease), color 0.2s var(--ec-ease);
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--ec-brand);
+    --bs-btn-border-color: var(--ec-brand);
+    --bs-btn-hover-bg: var(--ec-brand-dark);
+    --bs-btn-hover-border-color: var(--ec-brand-dark);
+    --bs-btn-active-bg: var(--ec-deep);
+    --bs-btn-active-border-color: var(--ec-deep);
+    --bs-btn-disabled-bg: var(--ec-brand);
+    --bs-btn-disabled-border-color: var(--ec-brand);
+    --bs-btn-focus-shadow-rgb: 14, 116, 144;
+    box-shadow: 0 2px 8px rgba(14, 116, 144, 0.25);
+}
+
+.btn-primary:hover {
+    box-shadow: 0 6px 16px rgba(14, 116, 144, 0.3);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--ec-link);
+    --bs-btn-border-color: var(--ec-brand);
+    --bs-btn-hover-bg: var(--ec-brand);
+    --bs-btn-hover-border-color: var(--ec-brand);
+    --bs-btn-active-bg: var(--ec-brand-dark);
+    --bs-btn-active-border-color: var(--ec-brand-dark);
+    --bs-btn-disabled-color: var(--ec-link);
+    --bs-btn-disabled-border-color: var(--ec-brand);
+}
+
+/* Gold call-to-action, used sparingly (home page hero). */
+.btn-sand {
+    --bs-btn-color: var(--ec-deep);
+    --bs-btn-bg: var(--ec-sand);
+    --bs-btn-border-color: var(--ec-sand);
+    --bs-btn-hover-color: var(--ec-deep);
+    --bs-btn-hover-bg: #e4d3a3;
+    --bs-btn-hover-border-color: #e4d3a3;
+    --bs-btn-active-color: var(--ec-deep);
+    --bs-btn-active-bg: #c4ac6c;
+    --bs-btn-active-border-color: #c4ac6c;
+    box-shadow: 0 4px 14px rgba(216, 194, 138, 0.35);
+}
+
+.btn-outline-light:hover {
+    color: var(--ec-deep);
+}
+
+/* ---------- Forms ---------- */
+
+.form-label {
+    font-weight: 600;
+    color: var(--ec-heading);
+    font-size: 0.9rem;
+}
+
+.form-control,
+.form-select {
+    border-color: var(--ec-line-strong);
+    border-radius: 0.55rem;
+    transition: border-color 0.2s var(--ec-ease), box-shadow 0.2s var(--ec-ease);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--ec-brand);
+    box-shadow: 0 0 0 0.2rem rgba(14, 116, 144, 0.18);
+}
+
+.form-check-input:checked {
+    background-color: var(--ec-brand);
+    border-color: var(--ec-brand);
+}
+
+/* ---------- Tables ---------- */
+
+.table-responsive {
+    background: var(--ec-surface);
+    border: 1px solid var(--ec-line);
+    border-radius: var(--ec-radius);
+    box-shadow: var(--ec-shadow);
+}
+
+.table {
+    --bs-table-hover-bg: var(--ec-brand-soft);
+    margin-bottom: 0;
+}
+
+.table thead th {
+    background: var(--ec-brand-soft);
+    color: var(--ec-heading);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--ec-line);
+    white-space: nowrap;
+}
+
+.table tbody tr {
+    transition: background-color 0.15s var(--ec-ease);
+}
+
+.table > :not(caption) > * > * {
+    padding: 0.8rem 1rem;
+}
+
+/* ---------- Badges, alerts, pagination ---------- */
+
+.badge.text-bg-secondary {
+    background: var(--ec-brand-soft) !important;
+    color: var(--ec-link) !important;
+    font-weight: 600;
+}
+
+/* Alerts keep Bootstrap's own tinted, fully bordered look; only the shape and entrance are ours. */
+.alert {
+    border-radius: var(--ec-radius);
+    animation: ec-rise 0.4s var(--ec-ease) both;
+}
+
+.pagination {
+    --bs-pagination-color: var(--ec-link);
+    --bs-pagination-hover-color: var(--ec-link);
+    --bs-pagination-hover-bg: var(--ec-brand-soft);
+    --bs-pagination-active-bg: var(--ec-brand);
+    --bs-pagination-active-border-color: var(--ec-brand);
+    --bs-pagination-focus-box-shadow: 0 0 0 0.2rem rgba(14, 116, 144, 0.18);
+}
+
+.progress-bar {
+    background-color: var(--ec-brand);
+}
+
+/* ---------- Home page hero ---------- */
+
+.ec-hero {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 2.5rem;
+    padding: 4.5rem 1.5rem;
+    border-radius: 1.25rem;
+    color: #fff;
+    text-align: center;
+    background:
+        radial-gradient(circle at 85% 15%, rgba(216, 194, 138, 0.22), transparent 45%),
+        linear-gradient(135deg, var(--ec-deep), var(--ec-brand));
+}
+
+.ec-hero h1 {
+    color: #fff;
+    font-size: clamp(2.4rem, 5.5vw, 4rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.ec-hero .lead {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* Hero pieces slide up one after another. */
+.ec-hero > * {
+    animation: ec-rise 0.7s var(--ec-ease) both;
+}
+.ec-hero > *:nth-child(2) { animation-delay: 0.08s; }
+.ec-hero > *:nth-child(3) { animation-delay: 0.16s; }
+.ec-hero > *:nth-child(4) { animation-delay: 0.24s; }
+
+/* ---------- Footer ---------- */
+
+.ec-footer {
+    background: var(--ec-surface);
+    border-top: 1px solid var(--ec-line);
+}
+
+/* ---------- Reduced motion: everything rests ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* ---------- Login, register and other guest pages ---------- */
+
+.ec-auth {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    background:
+        radial-gradient(circle at 10% 10%, rgba(216, 194, 138, 0.25), transparent 40%),
+        radial-gradient(circle at 90% 90%, rgba(14, 116, 144, 0.18), transparent 45%),
+        var(--ec-paper);
+}
+
+.ec-auth-box {
+    width: 100%;
+    max-width: 30rem;
+    animation: ec-rise 0.5s var(--ec-ease) both;
+}
+
+.ec-auth-brand {
+    display: block;
+    margin-bottom: 1.25rem;
+    color: var(--ec-heading);
+    font-family: var(--ec-font-display);
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-align: center;
+    text-decoration: none;
+}
+
+.ec-auth-brand .bi {
+    color: var(--ec-link);
+}
+
+/* The form card stays still on hover; only content cards lift. */
+.ec-auth-card:hover {
+    transform: none;
+    box-shadow: var(--ec-shadow);
+    border-color: var(--ec-line);
+}
+
+/* ---------- Light / dark switch ---------- */
+
+.ec-theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.85);
+    opacity: 0.9;
+    transition: transform 0.2s var(--ec-ease), background-color 0.2s var(--ec-ease), opacity 0.2s var(--ec-ease);
+}
+
+.ec-theme-toggle:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.12);
+    transform: rotate(15deg);
+}
+
+/* Show the moon in light mode (click for dark), the sun in dark mode (click for light). */
+.ec-theme-toggle .ec-sun,
+[data-bs-theme="dark"] .ec-theme-toggle .ec-moon { display: none; }
+[data-bs-theme="dark"] .ec-theme-toggle .ec-sun { display: inline; }
+
+/* On the login and register pages the switch floats in the corner on the page background. */
+.ec-auth .ec-theme-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    color: var(--ec-heading);
+}
+
+.ec-auth .ec-theme-toggle:hover {
+    background: var(--ec-brand-soft);
+}

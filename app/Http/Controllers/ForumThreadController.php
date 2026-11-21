@@ -14,7 +14,7 @@ class ForumThreadController extends Controller
     {
         $threads = ForumThread::with('author')
             ->withCount('replies')
-            ->when($request->filled('q'), fn ($query) => $query->where('title', 'like', '%'.$request->q.'%'))
+            ->when($request->filled('q'), fn ($query) => $query->whereLike('title', '%'.$request->q.'%'))
             ->latest()
             ->paginate(10)
             ->withQueryString();

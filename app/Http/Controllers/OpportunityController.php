@@ -20,7 +20,7 @@ class OpportunityController extends Controller
 
         $opportunities = Opportunity::approved()
             ->with('organization')
-            ->when($request->filled('q'), fn ($query) => $query->where('title', 'like', '%'.$request->q.'%'))
+            ->when($request->filled('q'), fn ($query) => $query->whereLike('title', '%'.$request->q.'%'))
             ->when($request->filled('type'), fn ($query) => $query->where('type', $request->type))
             ->orderByRaw($order, [today()->toDateString()])
             ->paginate(10)

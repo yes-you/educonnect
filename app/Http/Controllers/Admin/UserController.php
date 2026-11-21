@@ -18,8 +18,8 @@ class UserController extends Controller
         $users = User::query()
             ->when($request->filled('q'), function ($query) use ($request) {
                 $query->where(fn ($inner) => $inner
-                    ->where('name', 'like', '%'.$request->q.'%')
-                    ->orWhere('email', 'like', '%'.$request->q.'%'));
+                    ->whereLike('name', '%'.$request->q.'%')
+                    ->orWhereLike('email', '%'.$request->q.'%'));
             })
             ->when($request->filled('role'), fn ($query) => $query->where('role', $request->role))
             ->latest()

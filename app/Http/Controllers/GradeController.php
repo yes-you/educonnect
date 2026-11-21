@@ -32,7 +32,7 @@ class GradeController extends Controller
         $grades = Grade::with(['student', 'teacher'])
             ->when($user->hasRole('teacher'), fn ($query) => $query->where('teacher_id', $user->id))
             ->when($request->filled('student_id'), fn ($query) => $query->where('student_id', $request->student_id))
-            ->when($request->filled('subject'), fn ($query) => $query->where('subject', 'like', '%'.$request->subject.'%'))
+            ->when($request->filled('subject'), fn ($query) => $query->whereLike('subject', '%'.$request->subject.'%'))
             ->latest()
             ->paginate(10)
             ->withQueryString();

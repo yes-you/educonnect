@@ -10,6 +10,16 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
+        // On a live site create only one admin, with a password you choose. No demo accounts.
+        if (app()->isProduction()) {
+            $password = env('ADMIN_PASSWORD');
+            throw_if(strlen((string) $password) < 12, \RuntimeException::class, 'Set ADMIN_PASSWORD (at least 12 characters) before seeding in production.');
+
+            User::create(['name' => 'Admin', 'email' => env('ADMIN_EMAIL', 'admin@educonnect.test'), 'password' => Hash::make($password), 'role' => 'admin']);
+
+            return;
+        }
+
         $accounts = [
             ['Admin User', 'admin@educonnect.test', 'admin', null],
             ['Teacher User', 'teacher@educonnect.test', 'teacher', null],

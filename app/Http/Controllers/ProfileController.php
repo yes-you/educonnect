@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Grade;
+use App\Models\StudyGroup;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -49,10 +51,17 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
-        // The database refuses to delete a teacher who still owns grades, quizzes or modules.
-        if ($user->modules()->exists() || $user->quizzes()->exists() || Grade::where('teacher_id', $user->id)->exists()) {
+        // The last admin cannot leave: nobody else could create teacher or admin accounts.
+        if ($user->hasRole('admin') && User::where('role', 'admin')->count() === 1) {
+            return back()->withErrors(['password' => 'You are the only admin, so this account cannot be deleted.'], 'userDeletion');
+        }
+
+        // Deleting the account would delete these records (and other people's data) with it.
+        if ($user->modules()->exists() || $user->quizzes()->exists()
+            || Grade::where('teacher_id', $user->id)->exists()
+            || StudyGroup::where('owner_id', $user->id)->exists()) {
             return back()->withErrors(
-                ['password' => 'This account cannot be deleted while it still owns grades, quizzes or modules.'],
+                ['password' => 'This account cannot be deleted while it still owns grades, quizzes, modules or study groups.'],
                 'userDeletion'
             );
         }

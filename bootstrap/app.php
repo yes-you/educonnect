@@ -12,8 +12,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Railway terminates HTTPS in front of the app; trust it so URLs and cookies use https.
-        $middleware->trustProxies(at: '*');
+        // Trust a proxy only when TRUSTED_PROXIES is set (Railway: TRUSTED_PROXIES=*), so a visitor cannot fake their IP elsewhere.
+        $middleware->trustProxies(at: env('TRUSTED_PROXIES'));
 
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,

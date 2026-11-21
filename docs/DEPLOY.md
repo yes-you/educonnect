@@ -33,6 +33,10 @@ DB_USERNAME=postgres.<project-ref>
 DB_PASSWORD=<supabase db password>
 DB_SSLMODE=require
 
+TRUSTED_PROXIES=*   # Railway's proxy addresses change, so trust it; keep unset anywhere else
+ADMIN_PASSWORD=     # at least 12 characters, used once by the seeder
+ADMIN_EMAIL=        # optional, defaults to admin@educonnect.test
+
 SESSION_DRIVER=database
 CACHE_STORE=database
 QUEUE_CONNECTION=database
@@ -46,10 +50,12 @@ LOG_CHANNEL=stderr
    module files are deleted on every redeploy.
 7. Settings > Networking > Generate domain.
 
-## 3. Seed the demo accounts (once)
+## 3. Create the admin account (once)
 
 `php artisan db:seed --force` from the Railway shell (or `railway run php artisan db:seed --force`).
-The seeded accounts use the password `password`, so change them or delete them before real use.
+With `APP_ENV=production` the seeder creates only one admin, using `ADMIN_PASSWORD` (and `ADMIN_EMAIL`), and
+no demo accounts or demo content. It stops with an error if `ADMIN_PASSWORD` is missing or shorter than 12 characters.
+Remove `ADMIN_PASSWORD` from the variables after seeding.
 
 ## Known differences from MySQL
 

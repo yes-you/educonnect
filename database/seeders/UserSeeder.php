@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
         }
 
         $accounts = [
-            ['Admin User', 'admin@educonnect.test', 'admin', null],
+            //['Admin User', 'admin@educonnect.test', 'admin', null],
             ['Teacher User', 'teacher@educonnect.test', 'teacher', null],
             ['Student One', 'student@educonnect.test', 'student', 'Grade 10'],
             ['Student Two', 'student2@educonnect.test', 'student', 'Grade 10'],
